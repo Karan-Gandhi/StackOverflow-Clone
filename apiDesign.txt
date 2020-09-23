@@ -31,7 +31,7 @@
         - id -> string
         - userId -> user.id
         - body -> string
-        - status -> string (accepted, rejected)
+        - status -> string (accepted, rejected, normal)
 
     - Report
         - id -> string
@@ -53,10 +53,6 @@
         - body -> string
         - userId -> user.id
 
-
-- Front-end
-    - pages
-        - index
-        - profile
-        - question
-        - Ask Question
+- API
+    - GET:
+        -
