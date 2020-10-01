@@ -17,6 +17,8 @@ dependencies {
     implementation 'com.google.guava:guava:28.0-jre'
     implementation 'com.google.firebase:firebase-admin:7.0.0'
 
+    compile "org.slf4j:slf4j-simple:1.6.1"
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
