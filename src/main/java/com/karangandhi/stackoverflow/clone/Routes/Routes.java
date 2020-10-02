@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Routes implements Runnable {
-    static final File WEB_ROOT = new File("./src/views");
+    static final File WEB_ROOT = new File("./web/views");
     static final String DEFAULT_FILE = "index.html";
 
     private Socket socket;
@@ -22,11 +22,20 @@ public class Routes implements Runnable {
         this.verbose = verbose;
     }
 
+    private static byte[] get200Headder(String contentType, int fileLength) {
+        String header = "HTTP/1.1 200 OK" +
+                "\nServer: Java HTTP Server from Karan Gandhi : 1.0" +
+                "\nDate: " + new Date() +
+                "\nContent-type: " + contentType +
+                "\nContent-length: " + fileLength +
+                "\n";
+        return header.getBytes();
+    }
+
     @Override
     public void run() {
         try {
             inBufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            outPrintStream = new PrintStream(socket.getOutputStream());
             dataOut = new BufferedOutputStream(socket.getOutputStream());
             String line = inBufferedReader.readLine();
             StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
@@ -54,11 +63,10 @@ public class Routes implements Runnable {
                 System.out.println("[Socket] Error closing connection: " + exception.getMessage());
             }
         }
-
     }
 
     private void GET(String method, String route) throws IOException {
-        if (route.endsWith("/")) sendFile(outPrintStream, dataOut, DEFAULT_FILE);
+        if (route.endsWith("/")) sendFile(dataOut, DEFAULT_FILE);
     }
 
     private void POST(String method, String route) {}
@@ -67,39 +75,29 @@ public class Routes implements Runnable {
 
     private void DELETE(String method, String route) {}
 
-    private static void sendFile(PrintStream outPrintStream, BufferedOutputStream dataOut, String fileRequested) throws IOException {
+    private static void sendFile(BufferedOutputStream dataOut, String fileRequested) throws IOException {
         File file = new File(WEB_ROOT, DEFAULT_FILE);
         int fileLength = (int) file.length();
         String content = getContentType(fileRequested);
         byte[] fileData = readFile(file, fileLength);
 
-        outPrintStream.println("HTTP/1.1 200 OK");
-        outPrintStream.println("Server: Java HTTP Server from Karan Gandhi : 1.0");
-        outPrintStream.println("Date: " + new Date());
-        outPrintStream.println("Content-type: " + content);
-        outPrintStream.println("Content-length: " + fileLength);
-        outPrintStream.println();
-        outPrintStream.flush();
+        byte[] header = get200Headder(content, fileLength);
+        dataOut.write(header, 0, header.length);
         dataOut.write(fileData, 0, fileLength);
 
         dataOut.flush();
-        outPrintStream.close();
         dataOut.close();
     }
 
-    private static void sendFile(PrintStream outPrintStream, BufferedOutputStream dataOut, String fileRequested, HashMap<String, String> dataToReplace) throws IOException {
+    private static void sendFile(BufferedOutputStream dataOut, String fileRequested, HashMap<String, String> dataToReplace) throws IOException {
         File file = new File(WEB_ROOT, DEFAULT_FILE);
         int fileLength = (int) file.length();
         String content = getContentType(fileRequested);
         byte[] fileData = readFile(file, fileLength);
 
-        outPrintStream.println("HTTP/1.1 200 OK");
-        outPrintStream.println("Server: Java HTTP Server from Karan Gandhi : 1.0");
-        outPrintStream.println("Date: " + new Date());
-        outPrintStream.println("Content-type: " + content);
-        outPrintStream.println("Content-length: " + fileLength);
-        outPrintStream.println();
-        outPrintStream.flush();
+        byte[] header = get200Headder(content, fileLength);
+        dataOut.write(header, 0, header.length);
+
         String fileString = new String(fileData);
         dataToReplace.forEach((key, data) -> {
             fileString.replace(key, data);
@@ -108,7 +106,6 @@ public class Routes implements Runnable {
         dataOut.write(fileData, 0, fileLength);
 
         dataOut.flush();
-        outPrintStream.close();
         dataOut.close();
     }
 

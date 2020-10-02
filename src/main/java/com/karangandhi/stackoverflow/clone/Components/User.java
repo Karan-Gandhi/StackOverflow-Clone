@@ -3,7 +3,7 @@ package com.karangandhi.stackoverflow.clone.Components;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import com.karangandhi.stackoverflow.clone.Services.FirebaseService;
+import com.karangandhi.stackoverflow.clone.Services.FirebaseAuthService;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -40,11 +40,23 @@ public class User {
         this.email = email;
     }
 
-    public static Pair<UserRecord, WriteResult> UploadUserToDatabase(User user) throws FirebaseAuthException, ExecutionException, InterruptedException {
-        return FirebaseService.Auth.createUser(user);
+    public void addQuestion(Question question) {}
+
+    public void addAnswer(Answer answer) {}
+
+    public void addUpvote() {
+        this.reputation.add(new Reputation(this.id, "upvote"));
     }
 
-    public static void getUserFromDatabase(UUID id) {
+    public void addDownVote() {
+        this.reputation.add(new Reputation(this.id, "downvote"));
+    }
 
+    public static Pair<UserRecord, WriteResult> UploadUserToDatabase(User user) throws FirebaseAuthException, ExecutionException, InterruptedException {
+        return FirebaseAuthService.createUser(user);
+    }
+
+    public static User getUserFromDatabase(UUID id) throws ExecutionException, InterruptedException {
+        return FirebaseAuthService.getUser(id);
     }
 }
