@@ -10,16 +10,23 @@ import java.util.Date;
 public class BindSocketServer {
     static final int PORT = 3000;
     static final boolean verbose = true;
+    public static Thread thread = null;
 
     public static void bind() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            System.out.println("[ServerSocket] Sucessful connected to port " + PORT);
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(PORT);
+                    System.out.println("[ServerSocket] Sucessful connected to port " + PORT);
 
-            while(true) createSocket(serverSocket.accept());
-        } catch (IOException exception) {
-            System.out.println("[ServerSocket] ERROR: " + exception.getMessage());
-        }
+                    while(true) createSocket(serverSocket.accept());
+                } catch (IOException exception) {
+                    System.out.println("[ServerSocket] ERROR: " + exception.getMessage());
+                }
+            }
+        });
+        thread.start();
     }
 
     static void createSocket(Socket socket) {

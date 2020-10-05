@@ -56,4 +56,26 @@ public class FirestoreService {
         List<QueryDocumentSnapshot> queryDocumentSnapshotList = snapshotApiFuture.get().getDocuments();
         return queryDocumentSnapshotList;
     }
+
+    public static WriteResult deleteData(String collection, String document) throws ExecutionException, InterruptedException {
+        ApiFuture<WriteResult> writeResultApiFuture = database.collection(collection).document(document).delete();
+        WriteResult writeResult = writeResultApiFuture.get();
+        return writeResult;
+    }
+
+    public static void deleteCollection(String collection, int batchSize) throws ExecutionException, InterruptedException {
+        deleteCollection(database.collection(collection), batchSize);
+    }
+
+    // delete the collections in batches avoid errors
+    private static void deleteCollection(CollectionReference collectionReference, int batchSize) throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> apiFuture = collectionReference.limit(batchSize).get();
+        int deleted = 0;
+        List<QueryDocumentSnapshot> documentSnapshots = apiFuture.get().getDocuments();
+        for (QueryDocumentSnapshot documentSnapshot : documentSnapshots) {
+            documentSnapshot.getReference().delete();
+            deleted++;
+            if (deleted >= batchSize) deleteCollection(collectionReference, batchSize);
+        }
+    }
 }

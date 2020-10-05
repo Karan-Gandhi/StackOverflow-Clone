@@ -6,6 +6,7 @@ import com.karangandhi.stackoverflow.clone.Services.FirestoreService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class App {
     static final File WEB_ROOT = new File("./src/views");
@@ -21,6 +22,10 @@ public class App {
             BindSocketServer.bind();
         } catch (IOException exception) {
             exception.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
     }
 }
