@@ -8,7 +8,7 @@ public class Comment {
     public UUID userID;
     public String body;
 
-    public Comment(String body, UUID userID) {
+    public Comment(UUID userID, String body) {
         this.body = body;
         this.userID = userID;
         this.id = UUID.randomUUID();
@@ -18,6 +18,15 @@ public class Comment {
         this.id = id;
         this.userID = userID;
         this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", userID=" + userID +
+                ", body='" + body + '\'' +
+                '}';
     }
 
     @Override

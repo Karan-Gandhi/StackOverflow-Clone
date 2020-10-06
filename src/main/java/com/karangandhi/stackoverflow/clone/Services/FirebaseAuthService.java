@@ -81,6 +81,7 @@ public class FirebaseAuthService {
                     break;
                 }
             }
+            // check the database for the user in case it is not updated in the local storage
             if (found == null) {
                 List<QueryDocumentSnapshot> users = FirestoreService.getCollectionSnapshot("users");
                 for (QueryDocumentSnapshot userDocumentSnapshot : users) {
@@ -113,6 +114,12 @@ public class FirebaseAuthService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        for (User u : FirebaseAuthService.users) {
+            if (u.id.toString().equals(user.id.toString())) {
+                FirebaseAuthService.users.remove(u);
+            }
+        }
+        FirebaseAuthService.users.add(user);
         return new Pair<>(auth.updateUser(request), result);
     }
 
@@ -124,6 +131,7 @@ public class FirebaseAuthService {
 
     public static void deleteUser(User user) throws FirebaseAuthException, ExecutionException, InterruptedException {
         auth.deleteUser(user.id.toString());
+        FirebaseAuthService.users.remove(user);
         FirestoreService.deleteData("users", user.id.toString());
     }
 

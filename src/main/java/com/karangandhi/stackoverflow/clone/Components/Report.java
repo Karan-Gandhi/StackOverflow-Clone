@@ -7,6 +7,9 @@ public class Report {
     public UUID userID;
     public String type;
 
+    public static final String TYPE_DUPLICATE = "duplicate";
+    public static final String TYPE_NEEDS_TO_BE_FOCUSED = "needs to be focused";
+
     public Report(UUID userID, String type) {
         this.id = UUID.randomUUID();
         this.userID = userID;

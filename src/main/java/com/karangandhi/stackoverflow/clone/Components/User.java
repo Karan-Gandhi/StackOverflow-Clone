@@ -77,12 +77,17 @@ public class User {
     }
 
     public void addUpvote() throws FirebaseAuthException, ExecutionException, InterruptedException {
-        this.reputation.add(new Reputation(this.id, "upvote"));
+        this.reputation.add(new Reputation(this.id, Reputation.upVote));
         this.updateUserDatabase();
     }
 
     public void addDownVote() throws FirebaseAuthException, ExecutionException, InterruptedException {
-        this.reputation.add(new Reputation(this.id, "downvote"));
+        this.reputation.add(new Reputation(this.id, Reputation.downVote));
+        this.updateUserDatabase();
+    }
+
+    public void addAnswerAccepted() throws FirebaseAuthException, ExecutionException, InterruptedException {
+        this.reputation.add(new Reputation(this.id, Reputation.answerAccepted));
         this.updateUserDatabase();
     }
 
@@ -96,6 +101,14 @@ public class User {
 
     public void deleteUser() throws FirebaseAuthException, ExecutionException, InterruptedException {
         FirebaseAuthService.deleteUser(this);
+    }
+
+    public int getReputation() {
+        int rep = 0;
+        for (Reputation _reputation : this.reputation) rep += _reputation.type.equals(Reputation.upVote) ? 
+                Reputation.upVoteValue : _reputation.type.equals(Reputation.answerAccepted) ?
+                Reputation.answerAcceptedValue : Reputation.downVoteValue;
+        return rep;
     }
 
     public static Pair<UserRecord, WriteResult> UploadUserToDatabase(User user) throws FirebaseAuthException, ExecutionException, InterruptedException {

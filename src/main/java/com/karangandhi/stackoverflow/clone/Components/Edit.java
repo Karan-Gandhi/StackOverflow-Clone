@@ -9,11 +9,22 @@ public class Edit {
     public String body;
     public String status;
 
+    public static final String STATUS_NORMAL = "normal";
+    public static final String STATUS_ACCEPTED = "accepted";
+    public static final String STATUS_REJECTED = "rejected";
+
     public Edit(UUID userID, String body) {
         this.userID = userID;
         this.body = body;
         this.id = UUID.randomUUID();
-        this.status = "NORMAL";
+        this.status = STATUS_ACCEPTED;
+    }
+
+    public Edit(UUID userID, String body, String status) {
+        this.userID = userID;
+        this.body = body;
+        this.id = UUID.randomUUID();
+        this.status = status;
     }
 
     public Edit(UUID userID, UUID id, String body, String status) {
@@ -21,6 +32,17 @@ public class Edit {
         this.id = id;
         this.body = body;
         this.status = status;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Edit{" +
+                "id=" + id +
+                ", userID=" + userID +
+                ", body='" + body + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     @Override

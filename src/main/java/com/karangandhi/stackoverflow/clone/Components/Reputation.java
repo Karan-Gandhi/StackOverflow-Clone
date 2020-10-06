@@ -8,6 +8,14 @@ public class Reputation {
     private UUID userID;
     public String type;
 
+    public static final String upVote = "upVote";
+    public static final String downVote = "downVote";
+    public static final String answerAccepted = "downVote";
+
+    public static final int answerAcceptedValue = 20;
+    public static final int upVoteValue = 10;
+    public static final int downVoteValue = -2;
+
     public Reputation(UUID userID, String type) {
         this.userID = userID;
         this.type = type;

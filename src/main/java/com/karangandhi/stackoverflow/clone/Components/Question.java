@@ -1,10 +1,10 @@
 package com.karangandhi.stackoverflow.clone.Components;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
+// TODO: Add the firebase functions
 public class Question {
     public UUID id;
     public UUID userID;
@@ -44,6 +44,23 @@ public class Question {
         this.reports = reports;
         this.answers = answers;
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", userID=" + userID +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", status='" + status + '\'' +
+                ", edits=" + edits +
+                ", upVotes=" + upVotes +
+                ", downVotes=" + downVotes +
+                ", reports=" + reports +
+                ", answers=" + answers +
+                ", comments=" + comments +
+                '}';
     }
 
     @Override
