@@ -91,6 +91,11 @@ public class User {
         this.updateUserDatabase();
     }
 
+    public void addReputation(Reputation rep) throws FirebaseAuthException, ExecutionException, InterruptedException {
+        this.reputation.add(rep);
+        this.updateUserDatabase();
+    }
+
     public Pair<UserRecord, WriteResult> registerUser() throws FirebaseAuthException, ExecutionException, InterruptedException {
         return FirebaseAuthService.createUser(this);
     }
@@ -107,7 +112,8 @@ public class User {
         int rep = 0;
         for (Reputation _reputation : this.reputation) rep += _reputation.type.equals(Reputation.upVote) ? 
                 Reputation.upVoteValue : _reputation.type.equals(Reputation.answerAccepted) ?
-                Reputation.answerAcceptedValue : Reputation.downVoteValue;
+                Reputation.answerAcceptedValue : _reputation.type.equals(Reputation.gotCorrectAnswer) ?
+                Reputation.gotCorrectAnswerValue : Reputation.downVoteValue;
         return rep;
     }
 

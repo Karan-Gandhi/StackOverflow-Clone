@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 public class Answer {
     public UUID id;
     public UUID userID;
+    public UUID questionID;
     public String body;
     public String status;
     public ArrayList<Reputation> downVotes;
@@ -25,20 +26,21 @@ public class Answer {
     public static final String STATUS_COUNTERFEIT = "counterfeit";
     public static final String STATUS_NEEDS_TO_BE_FOCUSED = "needs to be focused";
 
-    public Answer(String body, UUID userID) throws ExecutionException, InterruptedException, FirebaseAuthException {
+    public Answer(String body, UUID userID, UUID questionID) throws ExecutionException, InterruptedException, FirebaseAuthException {
         this.id = UUID.randomUUID();
         this.userID = userID;
         this.body = body;
-        this.status = STATUS_NORMAL;
+        this.status = STATUS_NORMAL + "; ";
         this.upVotes = new ArrayList<Reputation>();
         this.downVotes = new ArrayList<Reputation>();
         this.reports = new ArrayList<Report>();
         this.edits = new ArrayList<Edit>();
         this.comments = new ArrayList<Comment>();
+        this.questionID = questionID;
         this.attachUser(this.getUser());
     }
 
-    public Answer(UUID id, UUID userID, String body, String status, ArrayList<Reputation> upVotes, ArrayList<Reputation> downVotes, ArrayList<Report> reports, ArrayList<Edit> edits, ArrayList<Comment> comments) {
+    public Answer(UUID id, UUID userID, String body, String status, ArrayList<Reputation> upVotes, ArrayList<Reputation> downVotes, ArrayList<Report> reports, ArrayList<Edit> edits, ArrayList<Comment> comments, UUID questionID) {
         this.id = id;
         this.userID = userID;
         this.body = body;
@@ -48,6 +50,11 @@ public class Answer {
         this.reports = reports;
         this.edits = edits;
         this.comments = comments;
+        this.questionID = questionID;
+    }
+
+    public Question getQuestion() throws ExecutionException, InterruptedException {
+        return Question.getQuestionById(this.questionID);
     }
 
     public Report addReport(String type) throws ExecutionException, InterruptedException {
@@ -59,14 +66,14 @@ public class Answer {
                 if (_report.type.equals(Report.TYPE_DUPLICATE)) occurrences[0]++;
                 else if (_report.type.equals(Report.TYPE_NEEDS_TO_BE_FOCUSED)) occurrences[1]++;
             }
-            this.status = occurrences[0] > occurrences[1] ? STATUS_COUNTERFEIT : STATUS_NEEDS_TO_BE_FOCUSED;
+            this.status += (occurrences[0] > occurrences[1] ? STATUS_COUNTERFEIT : STATUS_NEEDS_TO_BE_FOCUSED) + "; ";
         }
         this.updateDatabase();
         return report;
     }
 
     public void accept() throws ExecutionException, InterruptedException, FirebaseAuthException {
-        this.status = STATUS_ACCEPTED;
+        this.status += STATUS_ACCEPTED + "; ";
         this.getUser().addAnswerAccepted();
         this.updateDatabase();
     }
@@ -124,6 +131,10 @@ public class Answer {
 
     public void updateDatabase() throws ExecutionException, InterruptedException {
         FirestoreService.addData("answers", this.id.toString(), this);
+    }
+
+    public static Answer getAnswerById(UUID id) throws ExecutionException, InterruptedException {
+        return FirestoreService.readData("answers", id.toString()).toObject(Answer.class);
     }
 
     @Override

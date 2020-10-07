@@ -11,10 +11,12 @@ public class Reputation {
     public static final String upVote = "upVote";
     public static final String downVote = "downVote";
     public static final String answerAccepted = "downVote";
+    public static final String gotCorrectAnswer = "gotCorrectAnswer";
 
     public static final int answerAcceptedValue = 20;
     public static final int upVoteValue = 10;
     public static final int downVoteValue = -2;
+    public static final int gotCorrectAnswerValue = 4;
 
     public Reputation(UUID userID, String type) {
         this.userID = userID;
