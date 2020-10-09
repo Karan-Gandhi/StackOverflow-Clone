@@ -15,13 +15,13 @@ public class App {
     static final boolean verbose = true;
 
     public static void main(String[] args) {
-        PORT = Integer.parseInt(String.valueOf(System.getenv()));
-	System.out.println(PORT);
+        // PORT = Integer.parseInt(String.valueOf(System.getenv()));
+	// System.out.println(PORT);
         try {
             FirebaseService.InitializeApp();
             FirestoreService.Init();
             FirebaseAuthService.Init();
-            BindSocketServer.bind(PORT);
+            BindSocketServer.bind(3000);
         } catch (IOException exception) {
             exception.printStackTrace();
         } catch (InterruptedException exception) {

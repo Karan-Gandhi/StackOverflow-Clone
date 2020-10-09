@@ -31,7 +31,7 @@ application {
 
 // task stage for deploying to heroku
 task stage(dependsOn: ['run', 'clean'])
-run.mustRunAfter clean
+build.mustRunAfter clean
 
 // skip tests
 gradle.taskGraph.whenReady {
