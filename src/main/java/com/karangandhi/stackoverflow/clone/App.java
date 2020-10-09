@@ -11,19 +11,21 @@ import java.util.concurrent.ExecutionException;
 public class App {
     static final File WEB_ROOT = new File("./src/views");
 
-    static final int PORT = 3000;
+    static int PORT = 0;
     static final boolean verbose = true;
 
     public static void main(String[] args) {
+        PORT = Integer.parseInt(String.valueOf(System.getenv()));
+	System.out.println(PORT);
         try {
             FirebaseService.InitializeApp();
             FirestoreService.Init();
             FirebaseAuthService.Init();
-            BindSocketServer.bind();
+            BindSocketServer.bind(PORT);
         } catch (IOException exception) {
             exception.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }

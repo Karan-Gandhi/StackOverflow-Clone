@@ -15,6 +15,7 @@ repositories {
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.0-jre'
+    // firebase dependency
     implementation 'com.google.firebase:firebase-admin:7.0.0'
 
     compile "org.slf4j:slf4j-simple:1.6.1"
@@ -27,3 +28,22 @@ application {
     // Define the main class for the application
     mainClassName = 'com.karangandhi.stackoverflow.clone.App'
 }
+
+// task stage for deploying to heroku
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
+// skip tests
+gradle.taskGraph.whenReady {
+  taskGraph ->
+    if (taskGraph.hasTask(stage)) {
+      test.enabled = false
+    }
+}
+
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
