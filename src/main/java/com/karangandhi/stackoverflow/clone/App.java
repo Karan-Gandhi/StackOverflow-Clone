@@ -50,7 +50,7 @@ public class App {
             ServerSocket serverSocket = new ServerSocket(Integer.parseInt(String.valueOf(System.getenv("PORT") == null ? "5000" : System.getenv("PORT"))));
             System.out.println("[ServerSocket] Sucessful connected to port " + PORT);
 
-            new Thread(() -> {
+//            new Thread(() -> {
                 while(true) {
                     // This will wait till a client joins and then it will allot a sepreate thread for the given socket connection.
                     try {
@@ -59,7 +59,7 @@ public class App {
                         exception.printStackTrace();
                     }
                 }
-            }).start();
+//            }).start();
         } catch (IOException exception) {
             System.out.println("[ServerSocket] ERROR: " + exception.getMessage());
         }
