@@ -4,10 +4,8 @@ import com.karangandhi.stackoverflow.clone.Services.FirebaseAuthService;
 import com.karangandhi.stackoverflow.clone.Services.FirebaseService;
 import com.karangandhi.stackoverflow.clone.Services.FirestoreService;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class App {
     public static void main(String[] args) {

@@ -6,8 +6,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
+import com.google.firebase.database.utilities.Pair;
 import com.karangandhi.stackoverflow.clone.Components.User;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
