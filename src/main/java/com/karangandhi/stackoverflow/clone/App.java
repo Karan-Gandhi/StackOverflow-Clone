@@ -46,7 +46,7 @@ public class App {
 
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(String.valueOf(System.getenv("PORT"))));
+            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(String.valueOf(System.getenv("PORT") == null ? "5000" : System.getenv("PORT"))));
             System.out.println("[ServerSocket] Sucessful connected to port " + PORT);
 
             while(true) {
