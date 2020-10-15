@@ -66,7 +66,17 @@ public class Routes implements Runnable {
     }
 
     private void GET(String method, String route) throws IOException {
-        if (route.endsWith("/")) sendFile(dataOut, DEFAULT_FILE);
+//        if (route.endsWith("/")) sendFile(dataOut, DEFAULT_FILE);
+//        int fileLength = (int) file.length();
+        String content = "text/plain";
+        byte[] fileData = "Hello World".getBytes();
+
+        byte[] header = get200Headder(content, fileData.length);
+        dataOut.write(header, 0, header.length);
+        dataOut.write(fileData, 0, fileData.length);
+
+        dataOut.flush();
+        dataOut.close();
     }
 
     private void POST(String method, String route) {}
