@@ -41,18 +41,25 @@ public class App {
     static final File WEB_ROOT = new File(".");
     static final String DEFAULT_FILE = "src/views/index.html";
 
-    static final int PORT = 3000;
+    static int PORT = 3000;
     static final boolean verbose = true;
 
     public static void main(String[] args) {
         try {
+            PORT = Integer.parseInt(String.valueOf(System.getenv("PORT") == null ? "5000" : System.getenv("PORT")));
             ServerSocket serverSocket = new ServerSocket(Integer.parseInt(String.valueOf(System.getenv("PORT") == null ? "5000" : System.getenv("PORT"))));
             System.out.println("[ServerSocket] Sucessful connected to port " + PORT);
 
-            while(true) {
-                // This will wait till a client joins and then it will allot a sepreate thread for the given socket connection.
-                createSocket(serverSocket.accept());
-            }
+            new Thread(() -> {
+                while(true) {
+                    // This will wait till a client joins and then it will allot a sepreate thread for the given socket connection.
+                    try {
+                        createSocket(serverSocket.accept());
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            }).start();
         } catch (IOException exception) {
             System.out.println("[ServerSocket] ERROR: " + exception.getMessage());
         }
